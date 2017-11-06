@@ -55,17 +55,16 @@ function [t, y] = MyOde(f, tspan, y0, h, events)
     y(1,:) = y0';
     t(1) = tspan(1);
     n=1;
-    while n<=N
+    val =1;
+    while n<=N && val >=0
 		t(n+1)=t(n)+h;
-		f0 = f(t(n), y(n,:)')';
-		y(n+1,:) = y(n,:)+ h*f0;
-		f1 = f(t(n+1), y(n+1,:)')';
-		y(n+1,:) = y(n,:)+1/2* h*(f0+f1);
+		f1 = f(t(n), y(n,:)')';
+		y(n+1,:) = y(n,:)+ h * 12;
+		f2 = f(t(n+1), y(n+1,:)')';
+		y(n+1,:) = y(n,:)+ h*(f1+f2)/2;
 		n=n+1;
-		if events(t(n),y(n,:))< 0
-			break
-		end
-	end
+		val = events(t(n),y(n,:));
+    end
 	
     t=t(1:n);
     y=y(1:n,:);
