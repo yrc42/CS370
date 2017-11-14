@@ -23,3 +23,10 @@ function [x_cs, y_cs, t] = ParametricSpline(Sx,Sy)
     t = zeros(1,N);
     x_cs = [];
     y_cs = [];
+
+    t(1)=1.0;
+    for I = 1:N-1:
+      t(I+1) = t(I) + sqrt((Sx(I+1)-Sx(I))^2 + (y(I+1)-y(I))^2);
+    end
+    xpp = spline(t,Sx);
+    ypp = spline(t, Sy);
