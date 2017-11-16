@@ -38,32 +38,31 @@
 %
 %
 function pwc = MySpline(x, y)
-
+ 
     n = length(x);
     pwc.a = zeros(n,1);
     pwc.b = zeros(n-1,1);
     pwc.c = zeros(n-1,1);
-
+ 
     % Your code here
     h = zeros(n-1,1);
-    slope = zeros(n,1);
-    T = zeros(n);
-    for i =  1: n-1
+    s = zeros(n,1);
+    M = zeros(n);
+    for i = 1: n-1
         h(i) = x(i+1)-x(i);
     end
-    for j=1:n-2:
-        slope(j) = ((y(j+2)-y(j+1))/h(j+1))-((y(j+1)-y(j))/h(j));
+    for j=2:n-1
+        s(j) = ((y(j+1)-y(j))/h(j))-((y(j)-y(j-1))/h(j-1));
     end
-
     for m=2:n-1
-        T(m,m-1) = h(m-1)/6;
-        T(m,m) = (h(m-1)+h(m))/3;
-        T(m,m+1) = h(m)/6
+        M(m,m-1) = h(m-1)/6;
+        M(m,m) = (h(m-1)+h(m))/3;
+        M(m,m+1) = h(m)/6;
     end
-
-    T(1,1) = 1;
-    T(n,n) =1;
-    pwc.a = T/r;
+ 
+    M(1,1) = 1;
+    M(n,n) =1;
+    pwc.a = M\s;
     for k=1:n-1
         pwc.b(k) = y(k)/h(k) -(pwc.a(k)*h(k))/6;
         pwc.c(k) = y(k+1)/h(k) - (pwc.a(k+1)*h(k))/6;
